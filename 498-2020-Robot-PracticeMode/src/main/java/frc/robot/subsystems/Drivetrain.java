@@ -30,6 +30,7 @@ public class Drivetrain extends PIDSubsystem {
   private final double CPR = 2048;
   private final double WHEEL_CIRCUMFERENCE = Math.PI * 5;
   private final double false_DISTANCE_CONVERSION = WHEEL_CIRCUMFERENCE / CPR;
+  private final double MIN_TURNVAL = 0.2; //TODO: Change this to the minimum value needed to turn
 
   private final ADIS16448_IMU gyro = new ADIS16448_IMU();
 
@@ -130,6 +131,12 @@ public class Drivetrain extends PIDSubsystem {
   }
   public double getDriveAngle() {
     return gyro.getGyroAngleY();
+  }
+
+  //TODO: IMPLEMENT
+  public double getAutoTurn(double destination){
+    double autoErrorPercent = ((getDriveAngle() - destination) / destination) * 100;
+    return ((0.05 * autoErrorPercent) + MIN_TURNVAL);
   }
   public void resetGyro() {
     gyro.reset();
